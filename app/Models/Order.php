@@ -28,4 +28,12 @@ class Order extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public static function getStatus()
+    {
+        return [
+            'new' => 'Новый',
+            'completed' => 'Выполнен',
+        ];
+    }
 }

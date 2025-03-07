@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -18,14 +18,11 @@ class CategoryController extends Controller
         return view('categories.create');
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
-        ]);
+        $validatedData = $request->validated();
         
-        // dd($request->all());
-        Category::create($request->all());
+        Category::create($validatedData);
 
         return redirect()->route('categories.index')->with('success', 'Категория успешно создана.');
     }
@@ -40,13 +37,11 @@ class CategoryController extends Controller
         return view('categories.edit', compact('category'));
     }
 
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
-        ]);
+        $validatedData = $request->validated();
 
-        $category->update($request->all());
+        $category->update($validatedData);
 
         return redirect()->route('categories.index')->with('success', 'Категория успешно обновлена.');
     }

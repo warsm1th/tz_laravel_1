@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderRequest;
 use App\Models\Order;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class OrderController extends Controller
@@ -18,21 +18,15 @@ class OrderController extends Controller
     public function create()
     {
         $products = Product::all();
-        return view('orders.create', compact('products'));
+        $status = Order::getStatus();
+        return view('orders.create', compact('products', 'status'));
     }
 
-    public function store(Request $request)
+    public function store(OrderRequest $request)
     {
-        $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-            'created_at' => 'required|date',
-            'status' => 'nullable|in:new,completed',
-            'comment' => 'nullable|string',
-        ]);
+        $validatedData = $request->validated();
 
-        Order::create($request->all());
+        Order::create($validatedData);
 
         return redirect()->route('orders.index')->with('success', 'Заказ успешно создан.');
     }
@@ -50,18 +44,11 @@ class OrderController extends Controller
         return view('orders.edit', compact('order', 'products', 'created_at'));
     }
 
-    public function update(Request $request, Order $order)
+    public function update(OrderRequest $request, Order $order)
     {
-        $request->validate([
-            'customer_name' => 'required|string|max:255',
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-            'created_at' => 'required|date',
-            'status' => 'nullable|in:new,completed',
-            'comment' => 'nullable|string',
-        ]);
+        $validatedData = $request->validated();
 
-        $order->update($request->all());
+        $order->update($validatedData);
 
         return redirect()->route('orders.index')->with('success', 'Заказ успешно обновлен.');
     }

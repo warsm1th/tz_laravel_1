@@ -13,6 +13,7 @@
                 <th>Товар</th>
                 <th>Количество</th>
                 <th>Статус</th>
+                <th>Стоимость</th>
                 <th>Действия</th>
             </tr>
         </thead>
@@ -24,6 +25,7 @@
                     <td>{{ $order->product->name }}</td>
                     <td>{{ $order->quantity }}</td>
                     <td>{{ $order->status }}</td>
+                    <td>{{ $order->product->price * $order->quantity }}</td>
                     <td>
                         <a href="{{ route('orders.show', $order) }}" class="btn btn-info">Просмотр</a>
                         <a href="{{ route('orders.edit', $order) }}" class="btn btn-warning">Редактировать</a>

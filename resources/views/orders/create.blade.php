@@ -29,8 +29,9 @@
         <div class="form-group">
             <label for="status">Статус:</label>
             <select name="status" id="status" class="form-control" required>
-                <option value="new">Новый</option>
-                <option value="completed">Выполнен</option>
+                @foreach($status as $value => $label)
+                    <option value="{{ $value }}">{{ $label }}</option>
+                @endforeach
             </select>
         </div>
         <div class="form-group">

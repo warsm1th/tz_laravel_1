@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -20,16 +20,11 @@ class ProductController extends Controller
         return view('products.create', compact('categories'));
     }
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric|min:0',
-            'category_id' => 'required|exists:categories,id',
-        ]);
+        $validatedData = $request->validated();
 
-        Product::create($request->all());
+        Product::create($validatedData);
 
         return redirect()->route('products.index')->with('success', 'Товар успешно добавлен.');
     }
@@ -45,16 +40,12 @@ class ProductController extends Controller
         return view('products.edit', compact('product', 'categories'));
     }
 
-    public function update(Request $request, Product $product)
+    public function update(ProductRequest $request, Product $product)
     {
-        $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
-        ]);
+        $validatedData = $request->validated();
 
-        $product->update($request->all());
+        // dd($validatedData);
+        $product->update($validatedData);
 
         return redirect()->route('products.index')->with('success', 'Товар успешно обновлен.');
     }
