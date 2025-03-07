@@ -25,7 +25,7 @@
         </div>
         <div class="form-group">
             <label for="created_at">Дата создания:</label>
-            <input type="datetime-local" name="created_at" id="created_at" class="form-control" value="{{ $order->created_at->format('Y-m-d\TH:i') }}" required>
+            <input type="datetime-local" name="created_at" id="created_at" class="form-control" value="{{ $created_at }}" required>
         </div>
         <div class="form-group">
             <label for="status">Статус:</label>

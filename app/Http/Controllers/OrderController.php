@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -44,7 +45,9 @@ class OrderController extends Controller
     public function edit(Order $order)
     {
         $products = Product::all();
-        return view('orders.edit', compact('order', 'products'));
+
+        $created_at = Carbon::parse($order->created_at)->format('Y-m-d\TH:i');
+        return view('orders.edit', compact('order', 'products', 'created_at'));
     }
 
     public function update(Request $request, Order $order)
