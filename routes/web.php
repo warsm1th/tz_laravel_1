@@ -8,7 +8,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 
 
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
 Route::resource('categories', CategoryController::class);
 Route::resource('products', ProductController::class);
 Route::resource('orders', OrderController::class);
