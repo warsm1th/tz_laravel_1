@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Http\Requests\CategoryRequest;
+use App\Services\CategoryService;
 
 class CategoryController extends Controller
 {
+    public function __construct(protected CategoryService $categoryService)
+    {
+        
+    }
+
     public function index()
     {
-        $categories = Category::all();
+        $categories = $this->categoryService->getCategories();
+        
         return view('categories.index', compact('categories'));
     }
 
@@ -20,9 +27,7 @@ class CategoryController extends Controller
 
     public function store(CategoryRequest $request)
     {
-        $validatedData = $request->validated();
-        
-        Category::create($validatedData);
+        $this->categoryService->createCategory($request);
 
         return redirect()->route('categories.index')->with('success', 'Категория успешно создана.');
     }
@@ -39,16 +44,15 @@ class CategoryController extends Controller
 
     public function update(CategoryRequest $request, Category $category)
     {
-        $validatedData = $request->validated();
-
-        $category->update($validatedData);
+        $this->categoryService->updateCategory($request, $category);
 
         return redirect()->route('categories.index')->with('success', 'Категория успешно обновлена.');
     }
 
     public function destroy(Category $category)
     {
-        $category->delete();
+        $this->categoryService->deleteCategory($category);
+        
         return redirect()->route('categories.index')->with('success', 'Категория успешно удалена.');
     }
 }

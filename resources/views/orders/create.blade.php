@@ -29,7 +29,7 @@
         <div class="form-group">
             <label for="status">Статус:</label>
             <select name="status" id="status" class="form-control" required>
-                @foreach($status as $value => $label)
+                @foreach($statuses as $value => $label)
                     <option value="{{ $value }}">{{ $label }}</option>
                 @endforeach
             </select>

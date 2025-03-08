@@ -29,7 +29,7 @@ class Order extends Model
         return $this->belongsTo(Product::class);
     }
 
-    public static function getStatus()
+    public static function getStatuses()
     {
         return [
             'new' => 'Новый',

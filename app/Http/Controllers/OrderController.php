@@ -4,29 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
-use App\Models\Product;
-use Carbon\Carbon;
+use App\Services\OrderService;
 
 class OrderController extends Controller
 {
+    public function __construct(protected OrderService $orderService)
+    {
+        
+    }
+
     public function index()
     {
-        $orders = Order::with('product')->get();
+        $orders = $this->orderService->getOrders();
+
         return view('orders.index', compact('orders'));
     }
 
     public function create()
     {
-        $products = Product::all();
-        $status = Order::getStatus();
-        return view('orders.create', compact('products', 'status'));
+        $products = $this->orderService->getProducts();
+        $statuses = $this->orderService->getStatuses();
+        return view('orders.create', compact('products', 'statuses'));
     }
 
     public function store(OrderRequest $request)
     {
-        $validatedData = $request->validated();
-
-        Order::create($validatedData);
+        $this->orderService->createOrder($request);
 
         return redirect()->route('orders.index')->with('success', 'Заказ успешно создан.');
     }
@@ -38,24 +41,22 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
-        $products = Product::all();
+        $products = $this->orderService->getProducts();
+        $created_at = $this->orderService->getCreatedDate($order);
 
-        $created_at = Carbon::parse($order->created_at)->format('Y-m-d\TH:i');
         return view('orders.edit', compact('order', 'products', 'created_at'));
     }
 
     public function update(OrderRequest $request, Order $order)
     {
-        $validatedData = $request->validated();
-
-        $order->update($validatedData);
-
+        $this->orderService->updateOrder($request, $order);
+        
         return redirect()->route('orders.index')->with('success', 'Заказ успешно обновлен.');
     }
 
     public function destroy(Order $order)
     {
-        $order->delete();
+        $this->orderService->deleteOrder($order);
         return redirect()->route('orders.index')->with('success', 'Заказ успешно удален.');
     }
 }
