@@ -26,9 +26,11 @@ class OrderService
 
     public function getStatuses()
     {
-        $statuses = Order::getStatuses();
+        return [
+            'new' => 'Новый',
+            'completed' => 'Выполнен',
+        ];
 
-        return $statuses;
     }
 
     public function getCreatedDate(Order $order)
